@@ -39,23 +39,22 @@ const App: Component = () => {
 
   return (
     <div class={styles.App}>
-      <div>
-        {JSON.stringify(loggedInUser())}
-        <p>heeeeeeeeader zalogowany {loggedInUser()?.email}</p>
-        <p>admin: 4d6 || kot: 11e || pies: 123</p>
-        <Button onClick={logout}>logout</Button>
-      </div>
-
-      <div>sidebar</div>
       <Toaster />
       {loggedInUser() && (
-        <Routes>
-          <Route path="/" element={<Notes />} />
-          <Route path="/tinder" element={<Tinder />} />
-          {/* <Route path="/:userId/notes" element={<UpdateNote />} /> */}
-          <Route path="/notes/new" element={<NewNote />} />
-          <Route path="/notes/:id" element={<EditNote />} />
-        </Routes>
+        <>
+          <div>
+            {JSON.stringify(loggedInUser())}
+            <p>heeeeeeeeader zalogowany {loggedInUser()?.email}</p>
+            <p>admin: 4d6 || kot: 11e || pies: 123</p>
+            <Button onClick={logout}>logout</Button>
+          </div>
+          <Routes>
+            <Route path="/" element={<Notes />} />
+            <Route path="/tinder" element={<Tinder />} />
+            <Route path="/notes/new" element={<NewNote />} />
+            <Route path="/notes/:id" element={<EditNote />} />
+          </Routes>
+        </>
       )}
 
       {!loggedInUser() && (
@@ -66,19 +65,6 @@ const App: Component = () => {
           <Route path="/" element={<Auth />} />
         </Routes>
       )}
-
-      {/* <Route path="/">
-  <Users /> user/pages/users
-</Route> */}
-      {/* <Route path="/:userId/places">
-  <UserPlaces />
-</Route> */}
-      {/* <Route path="/places/new">
-  <NewPlace />
-</Route> */}
-      {/* <Route path="/places/:placeId">
-  <UpdatePlace />
-</Route> */}
     </div>
   );
 };

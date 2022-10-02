@@ -110,7 +110,9 @@ const Notes: Component = () => {
                   >
                     <Typography variant="h6">{el.title}</Typography>
                     <Typography variant="h6">
-                      {!!el.sharedWith?.length && <img src={shareIcon} />}
+                      {!!el.sharedWith?.length && (
+                        <img src={shareIcon} alt="share" />
+                      )}
                     </Typography>
                     <Typography>{el.contentPreview}</Typography>
                   </Link>

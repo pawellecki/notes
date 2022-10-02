@@ -7,15 +7,17 @@ type Props = {
   type?: 'button' | 'submit';
   isLoading?: any;
   isDisabled?: any;
+  variant?: 'text' | 'contained' | 'outlined';
   onClick?: () => void;
 };
 
 const Button: Component<Props> = (props) => {
-  const { children, type = 'button', onClick } = props;
+  const { children, type = 'button', variant = 'contained', onClick } = props;
 
   return (
     <MuiButton
       type={type}
+      variant={variant}
       onClick={onClick}
       disabled={props.isLoading || props.isDisabled}
     >

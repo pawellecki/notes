@@ -8,6 +8,7 @@ import Typography from '@suid/material/Typography';
 import Input from '../../components/Form/Input/Input';
 import Button from '../../components/Button/Button';
 import { setLoggedInUser, setNotesPreview } from '../../../globalStore';
+import logo from '../../assets/logo.svg';
 
 type FormValues = {
   email: string;
@@ -125,38 +126,44 @@ const Auth: Component = () => {
   );
 
   return (
-    <>
-      <div style={{ display: 'flex', 'justify-content': 'center' }}>
-        <form
-          use:form
-          style={{
-            display: 'flex',
-            'flex-direction': 'column',
-            width: '300px',
-          }}
-        >
-          {isLoginView() && loginInputs}
-          {!isLoginView() && registerInputs}
-          <Button type="submit" isLoading={isLoading()}>
-            {isLoginView() && 'Log in'}
-            {!isLoginView() && 'Register'}
+    <div class="loginWrapper">
+      <div class="loginBox">
+        <img src={logo} alt="logo" />
+        <div style={{ display: 'flex', 'justify-content': 'center' }}>
+          <form
+            use:form
+            style={{
+              display: 'flex',
+              'flex-direction': 'column',
+              width: '300px',
+            }}
+          >
+            {isLoginView() && loginInputs}
+            {!isLoginView() && registerInputs}
+            <Box className="mainLoginButton">
+              <Button type="submit" isLoading={isLoading()}>
+                {isLoginView() && 'let me in!'}
+                {!isLoginView() && 'sign up'}
+              </Button>
+            </Box>
+          </form>
+        </div>
+        <Box>
+          <Typography>
+            {isLoginView() && "Don't have an account?"}
+            {!isLoginView() && 'Already have an account?'}
+          </Typography>
+          <Button
+            variant="text"
+            onClick={() => setIsLoginView((prev) => !prev)}
+            isDisabled={isLoading()}
+          >
+            {isLoginView() && 'sign up'}
+            {!isLoginView() && 'login'}
           </Button>
-        </form>
+        </Box>
       </div>
-      <Box>
-        <Typography>
-          {isLoginView() && "Don't have an account?"}
-          {!isLoginView() && 'Already have an account?'}
-        </Typography>
-        <Button
-          onClick={() => setIsLoginView((prev) => !prev)}
-          isDisabled={isLoading()}
-        >
-          {isLoginView() && 'Sign up'}
-          {!isLoginView() && 'Log in'}
-        </Button>
-      </Box>
-    </>
+    </div>
   );
 };
 
