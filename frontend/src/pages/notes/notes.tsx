@@ -1,7 +1,6 @@
 import { Component, onMount, createSignal, mapArray } from 'solid-js';
 import toast from 'solid-toast';
 import Link from '@suid/material/Link';
-import Grid from '@suid/material/Grid';
 import Button from '@suid/material/Button';
 import { notesPreview, setNotesPreview } from '../../../globalStore';
 import TextEditor from '../../components/TextEditor/TextEditor';
@@ -80,12 +79,10 @@ const Notes: Component = () => {
   };
 
   return (
-    <div>
-      all notes
-      <Link href="/notes/new">Create note</Link>
-      <br />
-      <br />
-      <br />
+    <div class="notesView">
+      <Link class="" href="/notes/new">
+        <Button>Create note</Button>
+      </Link>
       {!notesPreview().length && (
         <div>
           This is an example note
@@ -93,46 +90,39 @@ const Notes: Component = () => {
         </div>
       )}
       {!!notesPreview().length && (
-        <Grid container spacing={4}>
+        <div class="cardsWrapper">
           {mapArray(
             () => notesPreview(),
             (el) => (
-              <Grid item xs={4}>
-                <div style={{ position: 'relative', height: '400px' }}>
-                  <Link
-                    href={`/notes/${el._id}`}
-                    style={{
-                      display: 'block',
-                      // width: 200,
-                      height: '400px',
-                      border: '2px solid grey',
-                    }}
-                  >
-                    <Typography variant="h6">{el.title}</Typography>
-                    <Typography variant="h6">
-                      {!!el.sharedWith?.length && (
-                        <img src={shareIcon} alt="share" />
-                      )}
-                    </Typography>
-                    <Typography>{el.contentPreview}</Typography>
-                  </Link>
+              <div class="card">
+                <Link href={`/notes/${el._id}`}>
+                  <Typography className="title">{el.title}</Typography>
+                  {!!el.sharedWith?.length && (
+                    <img class="shareIcon" src={shareIcon} alt="share" />
+                  )}
+                  {el.creatorId === loggedInUser()?.userId && (
+                    <img class="shareIcon" src={shareIcon} alt="share" />
+                  )}
+                  <Typography className="contentPreview">
+                    {el.contentPreview}
+                  </Typography>
+                </Link>
 
-                  <Button
-                    onClick={() => deleteNote(el._id)}
-                    style={{
-                      position: 'absolute',
-                      bottom: '10px',
-                      right: '10px',
-                    }}
-                    // disabled={isLoading()} //TODO
-                  >
-                    X
-                  </Button>
-                </div>
-              </Grid>
+                <Button
+                  onClick={() => deleteNote(el._id)}
+                  style={{
+                    position: 'absolute',
+                    bottom: '10px',
+                    right: '10px',
+                  }}
+                  // disabled={isLoading()} //TODO
+                >
+                  X
+                </Button>
+              </div>
             )
           )}
-        </Grid>
+        </div>
       )}
     </div>
   );

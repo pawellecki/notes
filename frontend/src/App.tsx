@@ -1,4 +1,4 @@
-import { Component, onMount, onCleanup } from 'solid-js';
+import { Component, onMount } from 'solid-js';
 import { Routes, Route, Navigate } from 'solid-app-router';
 import { Toaster } from 'solid-toast';
 import styles from './App.module.css';
@@ -38,12 +38,11 @@ const App: Component = () => {
   });
 
   return (
-    <div class={styles.App}>
+    <div>
       <Toaster />
       {loggedInUser() && (
         <>
-          <div>
-            {JSON.stringify(loggedInUser())}
+          <div class="appHeader">
             <p>heeeeeeeeader zalogowany {loggedInUser()?.email}</p>
             <p>admin: 4d6 || kot: 11e || pies: 123</p>
             <Button onClick={logout}>logout</Button>

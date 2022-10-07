@@ -2,13 +2,15 @@ import type { Component } from 'solid-js';
 import { createSignal } from 'solid-js';
 import { createForm } from '@felte/solid';
 import toast from 'solid-toast';
+import * as yup from 'yup';
+import { validator } from '@felte/validator-yup';
 import CircularProgress from '@suid/material/CircularProgress';
 import Box from '@suid/material/Box';
 import Typography from '@suid/material/Typography';
 import Input from '../../components/Form/Input/Input';
 import Button from '../../components/Button/Button';
 import { setLoggedInUser, setNotesPreview } from '../../../globalStore';
-import logo from '../../assets/logo.svg';
+import logo from '../../assets/logo.png';
 
 type FormValues = {
   email: string;
@@ -20,7 +22,16 @@ const Auth: Component = () => {
   const [isLoginView, setIsLoginView] = createSignal(true);
   const [isLoading, setIsLoading] = createSignal(false);
 
-  const { form } = createForm({
+  const schema = yup.object({
+    email: yup.string().email().required(),
+    password: yup.string().required(),
+    name: yup.lazy(() =>
+      isLoginView() ? yup.string() : yup.string().required()
+    ),
+  });
+
+  const { form, reset, errors } = createForm({
+    extend: [validator({ schema })],
     onSubmit: async (values: FormValues) => {
       setIsLoading(true);
 
@@ -112,16 +123,26 @@ const Auth: Component = () => {
 
   const loginInputs = (
     <>
-      <Input label="Email" name="email" />
-      <Input label="Password" name="password" type="password" />
+      <Input label="Email" name="email" error={errors().email} />
+      <Input
+        label="Password"
+        name="password"
+        type="password"
+        error={errors().password}
+      />
     </>
   );
 
   const registerInputs = (
     <>
-      <Input label="Name" name="name" />
-      <Input label="Email" name="email" />
-      <Input label="Password" name="password" type="password" />
+      <Input label="Name" name="name" error={errors().name} />
+      <Input label="Email" name="email" error={errors().email} />
+      <Input
+        label="Password"
+        name="password"
+        type="password"
+        error={errors().password}
+      />
     </>
   );
 
@@ -129,39 +150,31 @@ const Auth: Component = () => {
     <div class="loginWrapper">
       <div class="loginBox">
         <img src={logo} alt="logo" />
-        <div style={{ display: 'flex', 'justify-content': 'center' }}>
-          <form
-            use:form
-            style={{
-              display: 'flex',
-              'flex-direction': 'column',
-              width: '300px',
-            }}
-          >
-            {isLoginView() && loginInputs}
-            {!isLoginView() && registerInputs}
-            <Box className="mainLoginButton">
-              <Button type="submit" isLoading={isLoading()}>
-                {isLoginView() && 'let me in!'}
-                {!isLoginView() && 'sign up'}
-              </Button>
-            </Box>
-          </form>
-        </div>
-        <Box>
-          <Typography>
-            {isLoginView() && "Don't have an account?"}
-            {!isLoginView() && 'Already have an account?'}
-          </Typography>
-          <Button
-            variant="text"
-            onClick={() => setIsLoginView((prev) => !prev)}
-            isDisabled={isLoading()}
-          >
-            {isLoginView() && 'sign up'}
-            {!isLoginView() && 'login'}
-          </Button>
-        </Box>
+        <form use:form>
+          {isLoginView() && loginInputs}
+          {!isLoginView() && registerInputs}
+          <Box className="mainLoginButton">
+            <Button type="submit" isLoading={isLoading()}>
+              {isLoginView() && 'let me in!'}
+              {!isLoginView() && 'sign up'}
+            </Button>
+          </Box>
+        </form>
+        <Typography>
+          {isLoginView() && "Don't have an account?"}
+          {!isLoginView() && 'Already have an account?'}
+        </Typography>
+        <Button
+          variant="text"
+          onClick={() => {
+            reset();
+            setIsLoginView((prev) => !prev);
+          }}
+          isDisabled={isLoading()}
+        >
+          {isLoginView() && 'sign up'}
+          {!isLoginView() && 'login'}
+        </Button>
       </div>
     </div>
   );

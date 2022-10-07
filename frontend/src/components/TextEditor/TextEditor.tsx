@@ -21,6 +21,8 @@ type Props = {
   hasTestContent?: boolean;
 };
 
+const shortContentLength = 300;
+
 const TextEditor: Component<Props> = (props) => {
   let newQuill: any;
   let socket: any;
@@ -38,7 +40,10 @@ const TextEditor: Component<Props> = (props) => {
       if (source !== 'user') return;
 
       props.onChange &&
-        props.onChange(newQuill.getContents(), newQuill.getText(0, 100));
+        props.onChange(
+          newQuill.getContents(),
+          newQuill.getText(0, shortContentLength)
+        );
 
       socket.emit('send-changes', delta);
     };
@@ -67,7 +72,10 @@ const TextEditor: Component<Props> = (props) => {
       newQuill.setContents(JSON.parse(props.content), 'api');
 
       props.onChange &&
-        props.onChange(newQuill.getContents(), newQuill.getText(0, 100));
+        props.onChange(
+          newQuill.getContents(),
+          newQuill.getText(0, shortContentLength)
+        );
     }
   });
 
