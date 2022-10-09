@@ -6,6 +6,8 @@ import { notesPreview, setNotesPreview } from '../../../globalStore';
 import TextEditor from '../../components/TextEditor/TextEditor';
 import Typography from '@suid/material/Typography';
 import shareIcon from '../../assets/share.svg';
+import shieldIcon from '../../assets/shield.svg';
+import xIcon from '../../assets/x.svg';
 import { loggedInUser } from '../../../globalStore';
 
 const Notes: Component = () => {
@@ -97,28 +99,35 @@ const Notes: Component = () => {
               <div class="card">
                 <Link href={`/notes/${el._id}`}>
                   <Typography className="title">{el.title}</Typography>
-                  {!!el.sharedWith?.length && (
-                    <img class="shareIcon" src={shareIcon} alt="share" />
-                  )}
-                  {el.creatorId === loggedInUser()?.userId && (
-                    <img class="shareIcon" src={shareIcon} alt="share" />
-                  )}
+
                   <Typography className="contentPreview">
                     {el.contentPreview}
                   </Typography>
+                  <div class="footer">
+                    {el.creatorId === loggedInUser()?.userId && (
+                      <>
+                        <img class="icon shield" src={shieldIcon} alt="share" />
+                        <p>
+                          You are the author of this note as the lion is the
+                          king of the jungle!
+                        </p>
+                      </>
+                    )}
+                    {!!el.sharedWith?.length && (
+                      <>
+                        <img class="icon share" src={shareIcon} alt="share" />
+                        <p>This note is shared. Good for you!</p>
+                      </>
+                    )}
+                    <img
+                      class="icon delete"
+                      src={xIcon}
+                      alt="share"
+                      onClick={() => deleteNote(el._id)}
+                    />
+                    <p>Make this note disappear!</p>
+                  </div>
                 </Link>
-
-                <Button
-                  onClick={() => deleteNote(el._id)}
-                  style={{
-                    position: 'absolute',
-                    bottom: '10px',
-                    right: '10px',
-                  }}
-                  // disabled={isLoading()} //TODO
-                >
-                  X
-                </Button>
               </div>
             )
           )}
