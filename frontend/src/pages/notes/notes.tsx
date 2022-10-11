@@ -130,7 +130,10 @@ const Notes: Component = () => {
                       class="icon delete"
                       src={xIcon}
                       alt="share"
-                      onClick={() => deleteNote(el._id)}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        deleteNote(el._id);
+                      }}
                     />
                     <p>Make this note disappear!</p>
                   </div>

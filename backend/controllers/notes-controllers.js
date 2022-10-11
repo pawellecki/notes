@@ -252,7 +252,7 @@ const deleteNote = async (req, res, next) => {
   }
 
   const youAreNotNoteCreator =
-    note.creatorId.toString() !== req.userData.userId;
+    note.creatorId._id.toString() !== req.userData.userId;
   const noteIsNotSharedWithYou = !note.sharedWith.includes(req.userData.userId);
 
   if (youAreNotNoteCreator && noteIsNotSharedWithYou) {
