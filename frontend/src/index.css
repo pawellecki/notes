@@ -2,8 +2,8 @@
 /* 1. inerval save note */
 /* 2. check token renew */
 /* 3. check code colors in quill  */
-/* 4. fix delete */
 /* 5. error w http.tsx */
+
 html,
 body,
 div,
@@ -227,6 +227,15 @@ a {
 .textEditorWrapper {
   border: 1px solid #565656;
 }
+
+.ql-container strong {
+  font-weight: bold;
+}
+
+.ql-container em {
+  font-style: italic;
+}
+
 /* ---- main view ---- */
 
 .appHeader {
