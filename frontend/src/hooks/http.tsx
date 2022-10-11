@@ -1,8 +1,9 @@
 import { createSignal, createResource, onCleanup } from 'solid-js';
 import toast from 'solid-toast';
+import { IsLoading } from '../../globalTypes';
 
 export const useHttpClient = () => {
-  const [isLoading, setIsLoading] = createSignal(false);
+  const [isLoading, setIsLoading] = createSignal<IsLoading>();
   const [error, setError] = createSignal(null);
   const [activeHttpRequests, setActiveHttpRequests] = createSignal([]);
 
@@ -14,7 +15,7 @@ export const useHttpClient = () => {
     body: string | null = null,
     headers = {}
   ) => {
-    setIsLoading(true);
+    setIsLoading('true');
     const httpAbortCtrl = new AbortController();
     setActiveHttpRequests([...activeRequests, httpAbortCtrl]);
 
@@ -39,12 +40,12 @@ export const useHttpClient = () => {
         throw new Error(responseData.message);
       }
 
-      setIsLoading(false);
+      setIsLoading();
 
       return responseData;
     } catch (err) {
       setError(err.message);
-      setIsLoading(false);
+      setIsLoading();
       throw err;
     }
   };

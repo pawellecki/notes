@@ -3,26 +3,32 @@ import { createForm } from '@felte/solid';
 import toast from 'solid-toast';
 import TextEditor from '../../components/TextEditor/TextEditor';
 import Input from '../../components/Form/Input/Input';
+import * as yup from 'yup';
+import { validator } from '@felte/validator-yup';
 import Button from '../../components/Button/Button';
-import { loggedInUser } from '../../../globalStore';
-import { TextEditorContentWithPreview } from '../../../globalTypes';
-import { setNotesPreview } from '../../../globalStore';
+import { IsLoading, TextEditorContentWithPreview } from '../../../globalTypes';
+import { loggedInUser, setNotesPreview } from '../../../globalStore';
 
 type FormValues = {
   title: string;
 };
 
 const NewNote: Component = () => {
-  const [isLoading, setIsLoading] = createSignal(false);
+  const [isLoading, setIsLoading] = createSignal<IsLoading>();
   const [editorContent, setEditorContent] =
     createSignal<TextEditorContentWithPreview>({
       content: {},
       contentPreview: '',
     });
 
-  const { form } = createForm({
+  const schema = yup.object({
+    title: yup.string().required(),
+  });
+
+  const { form, errors } = createForm({
+    extend: [validator({ schema })],
     onSubmit: async (values: FormValues) => {
-      setIsLoading(true);
+      setIsLoading('true');
 
       try {
         const response = await fetch(`${import.meta.env.VITE_API_URI}/notes`, {
@@ -43,7 +49,7 @@ const NewNote: Component = () => {
         const { content, ...newNoteWithoutContent } = newNote;
 
         if (!response.ok) {
-          setIsLoading(false);
+          setIsLoading();
           return toast.error(message);
         }
 
@@ -52,31 +58,28 @@ const NewNote: Component = () => {
       } catch (err) {
         toast.error(err.message || 'Something went wrong');
       } finally {
-        setIsLoading(false);
+        setIsLoading();
       }
     },
   });
 
   return (
-    <div>
-      <p>new note</p>
-      <form
-        use:form
-        style={{
-          display: 'flex',
-          'flex-direction': 'column',
-          width: '300px',
-        }}
-      >
-        <Input label="Title" name="title" />
+    <div class="newNoteView">
+      <form use:form>
+        <Button
+          className="saveNewButton whiteTextButton"
+          type="submit"
+          isLoading={isLoading()}
+          variant="text"
+        >
+          save & go Back
+        </Button>
+        <Input label="Title" name="title" error={errors().title} />
         <TextEditor
           onChange={(content, contentPreview) =>
             setEditorContent({ content, contentPreview })
           }
         />
-        <Button type="submit" isLoading={isLoading()}>
-          sub new
-        </Button>
       </form>
     </div>
   );

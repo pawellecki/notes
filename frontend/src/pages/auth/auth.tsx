@@ -11,6 +11,7 @@ import Input from '../../components/Form/Input/Input';
 import Button from '../../components/Button/Button';
 import { setLoggedInUser, setNotesPreview } from '../../../globalStore';
 import logo from '../../assets/logo.png';
+import { IsLoading } from '../../../globalTypes';
 
 type FormValues = {
   email: string;
@@ -20,7 +21,7 @@ type FormValues = {
 
 const Auth: Component = () => {
   const [isLoginView, setIsLoginView] = createSignal(true);
-  const [isLoading, setIsLoading] = createSignal(false);
+  const [isLoading, setIsLoading] = createSignal<IsLoading>();
 
   const schema = yup.object({
     email: yup.string().email().required(),
@@ -33,7 +34,7 @@ const Auth: Component = () => {
   const { form, reset, errors } = createForm({
     extend: [validator({ schema })],
     onSubmit: async (values: FormValues) => {
-      setIsLoading(true);
+      setIsLoading('true');
 
       if (isLoginView()) {
         try {
@@ -53,7 +54,7 @@ const Auth: Component = () => {
           const responseData = await response.json();
 
           if (!response.ok) {
-            setIsLoading(false);
+            setIsLoading();
             return toast.error(responseData.message);
           }
 
@@ -83,7 +84,7 @@ const Auth: Component = () => {
           });
           setNotesPreview(notesPreview);
         } catch (err) {
-          setIsLoading(false);
+          setIsLoading();
 
           toast.error(err.message || 'Something went wrong');
         }
@@ -106,18 +107,18 @@ const Auth: Component = () => {
 
           const responseData = await response.json();
 
-          setIsLoading(false);
+          setIsLoading();
 
           if (!response.ok) {
             return toast.error(responseData.message);
           }
         } catch (err) {
           toast.error(err.message || 'Something went wrong');
-          setIsLoading(false);
+          setIsLoading();
         }
       }
 
-      setIsLoading(true);
+      setIsLoading('true');
     },
   });
 

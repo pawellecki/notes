@@ -9,9 +9,14 @@ import shareIcon from '../../assets/share.svg';
 import shieldIcon from '../../assets/shield.svg';
 import xIcon from '../../assets/x.svg';
 import { loggedInUser } from '../../../globalStore';
+import { IsLoading } from '../../../globalTypes';
+
+{
+  /* <p>admin: 4d6 || kot: 11e || pies: 123</p> */
+}
 
 const Notes: Component = () => {
-  const [isLoading, setIsLoading] = createSignal(true);
+  const [isLoading, setIsLoading] = createSignal<IsLoading>('true');
 
   onMount(() => {
     const getNotes = async () => {
@@ -29,7 +34,7 @@ const Notes: Component = () => {
         );
         const data = await response.json();
 
-        setIsLoading(false);
+        setIsLoading();
 
         if (!response.ok) {
           return toast.error("couldn't get user");
@@ -38,7 +43,7 @@ const Notes: Component = () => {
         setNotesPreview(data.notesPreview);
       } catch (err) {
         toast.error(err.message || 'Something went wrong');
-        setIsLoading(false);
+        setIsLoading();
       }
     };
 
@@ -48,7 +53,7 @@ const Notes: Component = () => {
   });
 
   const deleteNote = async (id: string) => {
-    setIsLoading(true);
+    setIsLoading('true');
 
     try {
       const response = await fetch(
@@ -63,7 +68,7 @@ const Notes: Component = () => {
       );
       const { id: deletedNoteId } = await response.json();
 
-      setIsLoading(false);
+      setIsLoading();
 
       if (!response.ok) {
         return toast.error('delete error');
@@ -76,14 +81,16 @@ const Notes: Component = () => {
       );
     } catch (err) {
       toast.error(err.message || 'Something went wrong');
-      setIsLoading(false);
+      setIsLoading();
     }
   };
 
   return (
     <div class="notesView">
-      <Link class="" href="/notes/new">
-        <Button>Create note</Button>
+      <Link href="/notes/new">
+        <Button className="whiteTextButton createNoteButton">
+          Create note
+        </Button>
       </Link>
       {!notesPreview().length && (
         <div>

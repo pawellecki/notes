@@ -2,19 +2,25 @@ import type { Component } from 'solid-js';
 import { createSignal, onMount } from 'solid-js';
 import { useLocation } from 'solid-app-router';
 import toast from 'solid-toast';
+import * as yup from 'yup';
+import { validator } from '@felte/validator-yup';
 import Typography from '@suid/material/Typography';
 import { createForm } from '@felte/solid';
-import { TextEditorContentWithPreview } from '../../../globalTypes';
-import { loggedInUser } from '../../../globalStore';
+import { TextEditorContentWithPreview, IsLoading } from '../../../globalTypes';
 import TextEditor from '../../components/TextEditor/TextEditor';
 import Button from '../../components/Button/Button';
 import Input from '../../components/Form/Input/Input';
-import { notesPreview, setNotesPreview, setUsers } from '../../../globalStore';
+import {
+  loggedInUser,
+  notesPreview,
+  setNotesPreview,
+  setUsers,
+} from '../../../globalStore';
 import ModalShareNote from './ModalShareNote';
 
 const EditNote: Component = () => {
   const [title, setTitle] = createSignal('');
-  const [isLoading, setIsLoading] = createSignal();
+  const [isLoading, setIsLoading] = createSignal<IsLoading>();
   const [isShareOpen, setIsShareOpen] = createSignal(false);
   const [noteCreatorEmail, setNoteCreatorEmail] = createSignal('');
   const [sharedWith, setSharedWith] = createSignal([]);
@@ -93,7 +99,12 @@ const EditNote: Component = () => {
     getNote();
   });
 
-  const { form } = createForm<{ title: string }>({
+  const schema = yup.object({
+    title: yup.string().required(),
+  });
+
+  const { form, errors } = createForm<{ title: string }>({
+    extend: [validator({ schema })],
     onSubmit: async () => {
       setIsLoading('true');
 
@@ -156,31 +167,38 @@ const EditNote: Component = () => {
 
   return (
     <>
-      <div>
-        update note
-        <form
-          use:form
-          style={{
-            display: 'flex',
-            'flex-direction': 'column',
-            width: '300px',
-          }}
-        >
+      <div class="editNoteView">
+        <form use:form>
+          <Button
+            className="saveNoteButton whiteTextButton"
+            variant="text"
+            type="submit"
+            isLoading={isLoading()}
+          >
+            save
+          </Button>
+          {noteCreatorEmail() === 'loggedInUser' && (
+            <Button
+              className="shareNoteButton whiteTextButton"
+              variant="text"
+              onClick={() => setIsShareOpen(true)}
+            >
+              share
+            </Button>
+          )}
+          {JSON.stringify(errors)}
           <Input
             label="Title"
             name="title"
             value={title()}
             onChange={setTitle}
+            error={errors().title}
           />
-          <Button type="submit" isLoading={isLoading()}>
-            update note
-          </Button>
         </form>
-        {noteCreatorEmail() && (
-          <Typography>Created by {noteCreatorEmail()}</Typography>
-        )}
-        {noteCreatorEmail() === 'loggedInUser' && (
-          <Button onClick={() => setIsShareOpen(true)}>share this note</Button>
+        {noteCreatorEmail() !== 'loggedInUser' && (
+          <Typography className="createdBy">
+            note created by {noteCreatorEmail()}
+          </Typography>
         )}
         <TextEditor
           noteId={noteId}

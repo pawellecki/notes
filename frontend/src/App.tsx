@@ -2,7 +2,6 @@ import { Component, onMount } from 'solid-js';
 import { Routes, Route, Navigate } from 'solid-app-router';
 import { Toaster } from 'solid-toast';
 import styles from './App.module.css';
-import Tinder from './pages/tinder';
 import Notes from './pages/notes/notes';
 import NewNote from './pages/newNote/newNote';
 import EditNote from './pages/editNote/editNote';
@@ -43,13 +42,13 @@ const App: Component = () => {
       {loggedInUser() && (
         <>
           <div class="appHeader">
-            <p>heeeeeeeeader zalogowany {loggedInUser()?.email}</p>
-            <p>admin: 4d6 || kot: 11e || pies: 123</p>
-            <Button onClick={logout}>logout</Button>
+            <p> {loggedInUser()?.email}</p>
+            <Button className="whiteTextButton" variant="text" onClick={logout}>
+              logout
+            </Button>
           </div>
           <Routes>
             <Route path="/" element={<Notes />} />
-            <Route path="/tinder" element={<Tinder />} />
             <Route path="/notes/new" element={<NewNote />} />
             <Route path="/notes/:id" element={<EditNote />} />
           </Routes>

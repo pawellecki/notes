@@ -26,3 +26,5 @@ export type TextEditorContentWithPreview = {
   content: object;
   contentPreview: string;
 };
+
+export type IsLoading = 'true' | undefined;

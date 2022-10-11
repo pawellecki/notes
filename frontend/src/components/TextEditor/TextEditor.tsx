@@ -80,7 +80,7 @@ const TextEditor: Component<Props> = (props) => {
   });
 
   return (
-    <Box sx={{ border: '2px solid blue' }}>
+    <Box className="textEditorWrapper">
       <div id="toolbar"></div>
       <div id="quill"></div>
     </Box>

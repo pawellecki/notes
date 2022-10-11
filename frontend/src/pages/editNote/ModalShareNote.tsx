@@ -5,9 +5,14 @@ import Modal from '@suid/material/Modal';
 import Box from '@suid/material/Box';
 import Switch from '@suid/material/Switch';
 import Paper from '@suid/material/Paper';
-import { loggedInUser } from '../../../globalStore';
-import { users, notesPreview, setNotesPreview } from '../../../globalStore';
 import Typography from '@suid/material/Typography';
+import {
+  loggedInUser,
+  users,
+  notesPreview,
+  setNotesPreview,
+} from '../../../globalStore';
+import { IsLoading } from '../../../globalTypes';
 
 type Props = {
   isOpen: boolean;
@@ -18,7 +23,7 @@ type Props = {
 };
 
 const ModalShareNote: Component<Props> = (props) => {
-  const [isLoading, setIsLoading] = createSignal();
+  const [isLoading, setIsLoading] = createSignal<IsLoading>();
 
   const { noteId, setSharedWith, onClose } = props;
 
