@@ -8,6 +8,7 @@ import { validator } from '@felte/validator-yup';
 import Button from '../../components/Button/Button';
 import { IsLoading, TextEditorContentWithPreview } from '../../../globalTypes';
 import { loggedInUser, setNotesPreview } from '../../../globalStore';
+import { useNavigate } from 'solid-app-router';
 
 type FormValues = {
   title: string;
@@ -21,6 +22,8 @@ const NewNote: Component = () => {
       contentPreview: '',
     });
 
+  const navigate = useNavigate();
+
   const schema = yup.object({
     title: yup.string().required(),
   });
@@ -29,6 +32,20 @@ const NewNote: Component = () => {
     extend: [validator({ schema })],
     onSubmit: async (values: FormValues) => {
       setIsLoading('true');
+
+      const isCustomContent = Object.keys(editorContent().content).length;
+      const defaultDelta = '{"ops":[{"insert":"\\n"}]}';
+      const content = isCustomContent
+        ? JSON.stringify(editorContent().content)
+        : defaultDelta;
+      const contentPreview = isCustomContent
+        ? editorContent().contentPreview
+        : '\n';
+
+      const contentWithPreview = {
+        content,
+        contentPreview,
+      };
 
       try {
         const response = await fetch(`${import.meta.env.VITE_API_URI}/notes`, {
@@ -39,8 +56,7 @@ const NewNote: Component = () => {
           },
           body: JSON.stringify({
             title: values.title,
-            content: JSON.stringify(editorContent().content),
-            contentPreview: editorContent().contentPreview,
+            ...contentWithPreview,
             tags: [],
             creatorId: loggedInUser()?.userId,
           }),
@@ -55,6 +71,7 @@ const NewNote: Component = () => {
 
         setNotesPreview((prev) => [newNoteWithoutContent, ...prev]);
         toast.success('Saved');
+        navigate('/');
       } catch (err) {
         toast.error(err.message || 'Something went wrong');
       } finally {
