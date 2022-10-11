@@ -85,24 +85,28 @@ const ModalShareNote: Component<Props> = (props) => {
         'align-items': 'center',
       }}
     >
-      <Paper style={{ width: '400px', height: '400px' }}>
-        <Typography>Share with users</Typography>
-        <For each={users()}>
-          {(user) => (
-            <>
-              {loggedInUser()?.userId !== user.id && (
-                <Box>
-                  {user.name} {user.email}
-                  <Switch
-                    checked={props.sharedWith.includes(user.id)}
-                    onChange={() => toggleShareWithUser(user.id)}
-                    disabled={!!isLoading()}
-                  />
-                </Box>
-              )}
-            </>
-          )}
-        </For>
+      <Paper className="shareModalContent">
+        <div>
+          <Typography>Share with users</Typography>
+          <For each={users()}>
+            {(user) => (
+              <>
+                {loggedInUser()?.userId !== user.id && (
+                  <Box className="shareUserRow">
+                    <span>
+                      <b>{user.name}</b> {user.email}
+                    </span>
+                    <Switch
+                      checked={props.sharedWith.includes(user.id)}
+                      onChange={() => toggleShareWithUser(user.id)}
+                      disabled={!!isLoading()}
+                    />
+                  </Box>
+                )}
+              </>
+            )}
+          </For>
+        </div>
       </Paper>
     </Modal>
   );

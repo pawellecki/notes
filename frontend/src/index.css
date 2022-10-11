@@ -150,6 +150,10 @@ a {
   text-decoration: none !important;
 }
 
+b {
+  font-weight: bold;
+}
+
 .MuiTextField-root p {
   color: #d32f2f;
 }
@@ -234,6 +238,33 @@ a {
 
 .ql-container em {
   font-style: italic;
+}
+
+.shareModalContent {
+  width: 500px;
+  height: 80vh;
+  padding: 24px 32px 32px;
+  border: 1px solid #565656;
+  border-radius: 6px;
+}
+
+.shareModalContent > div {
+  height: calc(80vh - 55px);
+  overflow: auto;
+}
+
+.shareModalContent > div > p {
+  margin-bottom: 16px;
+  text-align: center;
+  font-size: 18px;
+  font-weight: bold;
+  color: #3d3d3d;
+}
+
+.shareUserRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 /* ---- main view ---- */
