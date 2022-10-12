@@ -4,7 +4,6 @@ import { createForm } from '@felte/solid';
 import toast from 'solid-toast';
 import * as yup from 'yup';
 import { validator } from '@felte/validator-yup';
-import CircularProgress from '@suid/material/CircularProgress';
 import Box from '@suid/material/Box';
 import Typography from '@suid/material/Typography';
 import Input from '../../components/Form/Input/Input';
@@ -32,7 +31,7 @@ const Auth: Component = () => {
   });
 
   const { form, reset, errors } = createForm({
-    extend: [validator({ schema })],
+    extend: validator({ schema }),
     onSubmit: async (values: FormValues) => {
       setIsLoading('true');
 
@@ -84,14 +83,16 @@ const Auth: Component = () => {
           });
           setNotesPreview(notesPreview);
         } catch (err) {
-          setIsLoading();
+          if (err instanceof Error) {
+            toast.error(err.message || 'Something went wrong');
+          }
 
-          toast.error(err.message || 'Something went wrong');
+          setIsLoading();
         }
       } else {
         try {
           const response = await fetch(
-            `${import.meta.env.VITE_API_URI}/users/signup`,
+            `${import.meta.env.VITE_API_URI}/users/signupx`,
             {
               method: 'POST',
               headers: {
@@ -113,7 +114,10 @@ const Auth: Component = () => {
             return toast.error(responseData.message);
           }
         } catch (err) {
-          toast.error(err.message || 'Something went wrong');
+          if (err instanceof Error) {
+            toast.error(err.message || 'Something went wrong');
+          }
+
           setIsLoading();
         }
       }

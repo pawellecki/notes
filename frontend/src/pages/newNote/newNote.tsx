@@ -73,7 +73,9 @@ const NewNote: Component = () => {
         toast.success('Saved');
         navigate('/');
       } catch (err) {
-        toast.error(err.message || 'Something went wrong');
+        if (err instanceof Error) {
+          toast.error(err.message || 'Something went wrong');
+        }
       } finally {
         setIsLoading();
       }

@@ -42,7 +42,10 @@ const Notes: Component = () => {
 
         setNotesPreview(data.notesPreview);
       } catch (err) {
-        toast.error(err.message || 'Something went wrong');
+        if (err instanceof Error) {
+          toast.error(err.message || 'Something went wrong');
+        }
+
         setIsLoading();
       }
     };
@@ -80,7 +83,10 @@ const Notes: Component = () => {
         prev.filter((note) => note._id !== deletedNoteId)
       );
     } catch (err) {
-      toast.error(err.message || 'Something went wrong');
+      if (err instanceof Error) {
+        toast.error(err.message || 'Something went wrong');
+      }
+
       setIsLoading();
     }
   };

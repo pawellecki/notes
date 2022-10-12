@@ -70,7 +70,10 @@ const ModalShareNote: Component<Props> = (props) => {
       setSharedWith(sharedWith);
       toast.success('saved');
     } catch (err) {
-      toast.error(err.message || 'Something went wrong');
+      if (err instanceof Error) {
+        toast.error(err.message || 'Something went wrong');
+      }
+
       setIsLoading();
     }
   };

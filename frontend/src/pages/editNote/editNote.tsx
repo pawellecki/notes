@@ -60,7 +60,9 @@ const EditNote: Component = () => {
 
         setUsers(users);
       } catch (err) {
-        toast.error(err.message || 'Something went wrong');
+        if (err instanceof Error) {
+          toast.error(err.message || 'Something went wrong');
+        }
       }
     };
 
@@ -91,7 +93,10 @@ const EditNote: Component = () => {
         setSharedWith(note.sharedWith);
         setStartContent(note.content);
       } catch (err) {
-        toast.error(err.message || 'Something went wrong');
+        if (err instanceof Error) {
+          toast.error(err.message || 'Something went wrong');
+        }
+
         setIsLoading();
       }
     };
@@ -159,7 +164,10 @@ const EditNote: Component = () => {
         setNotesPreview([updatedNotePreview, ...notesWithoutUpdatedNote]);
         toast.success('saved');
       } catch (err) {
-        toast.error(err.message || 'Something went wrong');
+        if (err instanceof Error) {
+          toast.error(err.message || 'Something went wrong');
+        }
+
         setIsLoading();
       }
     },
