@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const io = require('socket.io')(3001, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: 'http://127.0.0.1:5173',
     methods: ['GET', 'POST'],
   },
 });
