@@ -1,5 +1,5 @@
 import type { Component } from 'solid-js';
-import { createSignal, onMount } from 'solid-js';
+import { createSignal, onMount, onCleanup } from 'solid-js';
 import { useLocation } from 'solid-app-router';
 import toast from 'solid-toast';
 import * as yup from 'yup';
@@ -18,6 +18,8 @@ import {
 } from '../../../globalStore';
 import ModalShareNote from './ModalShareNote';
 
+const SAVE_INTERVAL = 2000;
+
 const EditNote: Component = () => {
   const [title, setTitle] = createSignal('');
   const [isLoading, setIsLoading] = createSignal<IsLoading>();
@@ -34,6 +36,68 @@ const EditNote: Component = () => {
 
   const { pathname } = useLocation();
   const noteId = pathname.split('/')[2];
+
+  type SubmitProps = {
+    isSuccessToast?: boolean;
+  };
+  const submit = async ({ isSuccessToast = true }: SubmitProps) => {
+    setIsLoading('true');
+
+    const body = {
+      title: title(),
+      contentPreview: editorContent().contentPreview,
+      creatorId: noteCreatorId(),
+      content: JSON.stringify(editorContent().content),
+    };
+
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_API_URI}/notes/${noteId}`,
+        {
+          method: 'PATCH',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: 'Bearer ' + loggedInUser()?.token,
+          },
+          body: JSON.stringify(body),
+        }
+      );
+
+      const data = await response.json();
+
+      const { _id, creatorId, contentPreview, title, tags, sharedWith } =
+        data.note || {};
+
+      setIsLoading();
+
+      if (!response.ok) {
+        return toast.error('Something went wrong');
+      }
+
+      const updatedNotePreview = {
+        _id,
+        creatorId,
+        contentPreview,
+        title,
+        tags,
+        sharedWith,
+      };
+
+      const notesWithoutUpdatedNote = notesPreview().filter(
+        (note) => note._id !== noteId
+      );
+
+      setNotesPreview([updatedNotePreview, ...notesWithoutUpdatedNote]);
+
+      isSuccessToast && toast.success('saved');
+    } catch (err) {
+      if (err instanceof Error) {
+        toast.error(err.message || 'Something went wrong');
+      }
+
+      setIsLoading();
+    }
+  };
 
   onMount(() => {
     const getUsers = async (noteCreatorId: string) => {
@@ -102,75 +166,26 @@ const EditNote: Component = () => {
     };
 
     getNote();
+
+    const interval = setInterval(() => {
+      submit({ isSuccessToast: false });
+
+      console.log('submit');
+    }, SAVE_INTERVAL);
+
+    onCleanup(() => {
+      clearInterval(interval);
+    });
   });
 
   const schema = yup.object({
     title: yup.string().required(),
   });
 
-  const { form, errors } = createForm<{ title: string }>({
-    extend: [validator({ schema })],
-    onSubmit: async () => {
-      setIsLoading('true');
-
-      const bodyWithoutContent = {
-        title: title(),
-        contentPreview: editorContent().contentPreview,
-        creatorId: noteCreatorId(),
-      };
-
-      const body = {
-        ...bodyWithoutContent,
-        content: JSON.stringify(editorContent().content),
-      };
-
-      try {
-        const response = await fetch(
-          `${import.meta.env.VITE_API_URI}/notes/${noteId}`,
-          {
-            method: 'PATCH',
-            headers: {
-              'Content-Type': 'application/json',
-              Authorization: 'Bearer ' + loggedInUser()?.token,
-            },
-            body: JSON.stringify(body),
-          }
-        );
-
-        const data = await response.json();
-
-        const { _id, creatorId, contentPreview, title, tags, sharedWith } =
-          data.note || {};
-
-        setIsLoading();
-
-        if (!response.ok) {
-          return toast.error('Something went wrong');
-        }
-
-        const updatedNotePreview = {
-          _id,
-          creatorId,
-          contentPreview,
-          title,
-          tags,
-          sharedWith,
-        };
-
-        const notesWithoutUpdatedNote = notesPreview().filter(
-          (note) => note._id !== noteId
-        );
-
-        setNotesPreview([updatedNotePreview, ...notesWithoutUpdatedNote]);
-        toast.success('saved');
-      } catch (err) {
-        if (err instanceof Error) {
-          toast.error(err.message || 'Something went wrong');
-        }
-
-        setIsLoading();
-      }
-    },
+  const { form, errors } = createForm({
+    initialValues: { title: 'new note' },
+    extend: validator({ schema }),
+    onSubmit: submit,
   });
 
   return (
@@ -181,7 +196,6 @@ const EditNote: Component = () => {
             className="saveNoteButton whiteTextButton"
             variant="text"
             type="submit"
-            isLoading={isLoading()}
           >
             save
           </Button>
@@ -194,7 +208,6 @@ const EditNote: Component = () => {
               share
             </Button>
           )}
-          {JSON.stringify(errors)}
           <Input
             label="Title"
             name="title"

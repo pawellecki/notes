@@ -12,8 +12,6 @@ import { io } from 'socket.io-client';
 //   languages: ['javascript', 'ruby', 'python'],
 // });
 
-//TODO dorobic save interval w quill
-
 type Props = {
   noteId?: string;
   content?: string;
