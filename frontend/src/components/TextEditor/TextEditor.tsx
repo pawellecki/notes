@@ -7,11 +7,6 @@ import hljs from 'highlight.js';
 import { options, testContent } from './const';
 import { io } from 'socket.io-client';
 
-// hljs.configure({d
-//   // optionally configure hljs
-//   languages: ['javascript', 'ruby', 'python'],
-// });
-
 type Props = {
   noteId?: string;
   content?: string;

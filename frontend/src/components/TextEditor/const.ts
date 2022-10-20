@@ -6,7 +6,7 @@ const toolbar = [
 
   [{ header: 1 }, { header: 2 }], // custom button values
   [{ list: 'ordered' }, { list: 'bullet' }],
-  // [{ script: 'sub' }, { script: 'super' }], // superscript/subscript
+
   [{ indent: '-1' }, { indent: '+1' }], // outdent/indent
   [{ direction: 'rtl' }], // text direction
 
@@ -24,11 +24,11 @@ export const options = {
   // debug: 'info',
   modules: {
     syntax: {
-      highlight: (text) => hljs.highlightAuto(text).value,
+      highlight: (text: string) => hljs.highlightAuto(text).value,
     },
     toolbar,
   },
-  // placeholder: 'Compose an epic...',
+  placeholder: 'Winter is coming..',
   // readOnly: true,
   theme: 'snow',
 };
@@ -72,7 +72,7 @@ export const testContent = {
       insert: 'crossed',
     },
     {
-      insert: '\nquote',
+      insert: '\nQuote: Talk is cheap. Show me the code',
     },
     {
       attributes: {
@@ -81,7 +81,25 @@ export const testContent = {
       insert: '\n',
     },
     {
-      insert: 'code',
+      insert: 'if (isCodeOk) {',
+    },
+    {
+      attributes: {
+        'code-block': true,
+      },
+      insert: '\n',
+    },
+    {
+      insert: '    createNote()',
+    },
+    {
+      attributes: {
+        'code-block': true,
+      },
+      insert: '\n',
+    },
+    {
+      insert: '}',
     },
     {
       attributes: {
@@ -108,7 +126,7 @@ export const testContent = {
       insert: '\n',
     },
     {
-      insert: 'ol list el',
+      insert: 'ol list el1',
     },
     {
       attributes: {
@@ -135,7 +153,7 @@ export const testContent = {
       insert: '\n',
     },
     {
-      insert: 'ul list el 2',
+      insert: 'ul list el2',
     },
     {
       attributes: {
@@ -144,25 +162,7 @@ export const testContent = {
       insert: '\n',
     },
     {
-      insert: 'text',
-    },
-    {
-      attributes: {
-        script: 'sub',
-      },
-      insert: 'bottom',
-    },
-    {
-      insert: '\ntext',
-    },
-    {
-      attributes: {
-        script: 'super',
-      },
-      insert: 'top',
-    },
-    {
-      insert: '\ntexttextextse indent left/right',
+      insert: '\ntext indent left/right',
     },
     {
       attributes: {
@@ -170,8 +170,143 @@ export const testContent = {
       },
       insert: '\n',
     },
+    { insert: 'float left\nfloat right' },
+    { attributes: { align: 'right', direction: 'rtl' }, insert: '\n' },
+
     {
-      insert: 'text\n\n',
+      attributes: {
+        size: 'small',
+      },
+      insert: 'Small',
+    },
+    {
+      insert: ' Normal ',
+    },
+    {
+      attributes: {
+        size: 'large',
+      },
+      insert: 'Large',
+    },
+    {
+      insert: ' ',
+    },
+    {
+      attributes: {
+        size: 'huge',
+      },
+      insert: 'Huge',
+    },
+    {
+      insert: '\n',
+    },
+    {
+      attributes: {
+        size: 'huge',
+      },
+      insert: 'Heading 1',
+    },
+    {
+      insert: '\nHeading 2',
+    },
+    {
+      attributes: {
+        header: 2,
+      },
+      insert: '\n',
+    },
+    {
+      insert: 'Heading 3',
+    },
+    {
+      attributes: {
+        header: 3,
+      },
+      insert: '\n',
+    },
+    {
+      insert: 'Heading 4',
+    },
+    {
+      attributes: {
+        header: 4,
+      },
+      insert: '\n',
+    },
+    {
+      insert: 'Heading 5',
+    },
+    {
+      attributes: {
+        header: 5,
+      },
+      insert: '\n',
+    },
+    {
+      insert: 'Heading 6',
+    },
+    {
+      attributes: {
+        header: 6,
+      },
+      insert: '\n',
+    },
+    {
+      insert: 'Normal\n',
+    },
+    {
+      attributes: {
+        color: '#0066cc',
+      },
+      insert: 'color text',
+    },
+    {
+      insert: '\n',
+    },
+    {
+      attributes: {
+        background: '#cce0f5',
+      },
+      insert: 'color background',
+    },
+    {
+      insert: '\nSans Serif\n',
+    },
+    {
+      attributes: {
+        font: 'serif',
+      },
+      insert: 'Serif',
+    },
+    {
+      insert: '\n',
+    },
+    {
+      attributes: {
+        font: 'monospace',
+      },
+      insert: 'Monospace',
+    },
+    {
+      insert: '\n',
+    },
+    {
+      insert: 'left\ncenter',
+    },
+    {
+      attributes: {
+        align: 'center',
+      },
+      insert: '\n',
+    },
+    {
+      insert: 'right',
+    },
+    {
+      attributes: {
+        align: 'right',
+      },
+      insert: '\n',
     },
   ],
 };

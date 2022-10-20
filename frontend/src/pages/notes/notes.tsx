@@ -99,10 +99,12 @@ const Notes: Component = () => {
         </Button>
       </Link>
       {!notesPreview().length && (
-        <div>
-          This is an example note
+        <>
+          <Typography className="exampleNoteTitle">
+            This is an example note
+          </Typography>
           <TextEditor hasTestContent />
-        </div>
+        </>
       )}
       {!!notesPreview().length && (
         <div class="cardsWrapper">
@@ -112,7 +114,6 @@ const Notes: Component = () => {
               <div class="card">
                 <Link href={`/notes/${el._id}`}>
                   <Typography className="title">{el.title}</Typography>
-
                   <Typography className="contentPreview">
                     {el.contentPreview}
                   </Typography>
