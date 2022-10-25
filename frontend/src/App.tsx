@@ -1,15 +1,17 @@
 import { Component, onMount } from 'solid-js';
-import { Routes, Route, Navigate } from 'solid-app-router';
+import { Routes, Route, Navigate, useNavigate } from 'solid-app-router';
 import { Toaster } from 'solid-toast';
-import styles from './App.module.css';
 import Notes from './pages/notes/notes';
 import NewNote from './pages/newNote/newNote';
 import EditNote from './pages/editNote/editNote';
+import Info from './pages/info/info';
 import Auth from './pages/auth/auth';
 import { loggedInUser, setLoggedInUser } from '../globalStore';
 import Button from './components/Button/Button';
 
 const App: Component = () => {
+  const navigate = useNavigate();
+
   const userData = localStorage.getItem('userData') ?? '';
   const { userId, email, token, expiration } =
     (userData && JSON.parse(userData)) ?? {};
@@ -46,11 +48,13 @@ const App: Component = () => {
             <Button className="whiteTextButton" variant="text" onClick={logout}>
               logout
             </Button>
+            <span onClick={() => navigate('/info')}>?</span>
           </div>
           <Routes>
             <Route path="/" element={<Notes />} />
             <Route path="/notes/new" element={<NewNote />} />
             <Route path="/notes/:id" element={<EditNote />} />
+            <Route path="/info" element={<Info />} />
           </Routes>
         </>
       )}

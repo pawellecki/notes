@@ -16,7 +16,7 @@ import { IsLoading } from '../../../globalTypes';
 }
 
 const Notes: Component = () => {
-  const [isLoading, setIsLoading] = createSignal<IsLoading>('true');
+  const [isLoading, setIsLoading] = createSignal<IsLoading>();
 
   onMount(() => {
     const getNotes = async () => {
@@ -34,13 +34,12 @@ const Notes: Component = () => {
         );
         const data = await response.json();
 
-        setIsLoading();
-
         if (!response.ok) {
           return toast.error("couldn't get user");
         }
 
         setNotesPreview(data.notesPreview);
+        setIsLoading();
       } catch (err) {
         if (err instanceof Error) {
           toast.error(err.message || 'Something went wrong');
