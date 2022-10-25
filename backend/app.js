@@ -3,7 +3,7 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const io = require('socket.io')(3001, {
   cors: {
-    origin: 'http://127.0.0.1:5173',
+    origin: 'https://animated-cannoli-3bf6d7.netlify.app',
     methods: ['GET', 'POST'],
   },
 });
@@ -49,7 +49,6 @@ app.use((req, res, next) => {
 });
 
 app.use((error, req, res, next) => {
-  //respons sent
   if (res.headerSent) {
     return next(error);
   }
