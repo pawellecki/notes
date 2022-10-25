@@ -169,8 +169,6 @@ const EditNote: Component = () => {
 
     const interval = setInterval(() => {
       submit({ isSuccessToast: false });
-
-      console.log('submit');
     }, SAVE_INTERVAL);
 
     onCleanup(() => {

@@ -18,31 +18,11 @@ router.get('/user/:id', getNotesByUserId);
 
 router.use(checkAuth);
 
-router.post(
-  '/',
-  [
-    check('title').not().isEmpty(),
-    // check('tags').isLength({ min: 1 })
-  ],
-  addNote
-);
+router.post('/', [check('title').not().isEmpty()], addNote);
 
-router.patch(
-  '/:id',
-  [
-    check('title').not().isEmpty(),
-    // check('tags').isLength({ min: 1 })
-  ],
-  editNote
-);
+router.patch('/:id', [check('title').not().isEmpty()], editNote);
 
-router.patch(
-  '/:id/share',
-  [
-    // check('shareWith').not().isEmpty(),
-  ],
-  shareNote
-);
+router.patch('/:id/share', [], shareNote);
 
 router.delete('/:id', deleteNote);
 

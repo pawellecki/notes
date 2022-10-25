@@ -55,8 +55,6 @@ const addNote = async (req, res, next) => {
     title,
     content,
     contentPreview,
-    // tags,
-    //   image: { type: String, required: true },
     creatorId: req.userData.userId,
   });
 
@@ -96,13 +94,7 @@ const editNote = async (req, res, next) => {
   if (!errors.isEmpty()) {
     return next(new HttpError('Error while edit', 422));
   }
-  const {
-    title,
-    // tags,
-    content,
-    contentPreview,
-    creatorId,
-  } = req.body;
+  const { title, content, contentPreview, creatorId } = req.body;
   const { id } = req.params;
 
   let note;
@@ -125,7 +117,6 @@ const editNote = async (req, res, next) => {
   note.content = content;
   note.contentPreview = contentPreview;
   note.creatorId = creatorId;
-  // note.tags = tags;
 
   try {
     await note.save();

@@ -11,10 +11,6 @@ import xIcon from '../../assets/x.svg';
 import { loggedInUser } from '../../../globalStore';
 import { IsLoading } from '../../../globalTypes';
 
-{
-  /* <p>admin: 4d6 || kot: 11e || pies: 123</p> */
-}
-
 const Notes: Component = () => {
   const [isLoading, setIsLoading] = createSignal<IsLoading>();
 

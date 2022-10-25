@@ -3,7 +3,6 @@ import { onMount, onCleanup, createEffect } from 'solid-js';
 import Quill from 'quill';
 import Box from '@suid/material/Box';
 import '../../../node_modules/quill/dist/quill.snow.css';
-import hljs from 'highlight.js';
 import { options, testContent } from './const';
 import { io } from 'socket.io-client';
 
