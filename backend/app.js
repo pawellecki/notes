@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const app = express();
 const io = require('socket.io')(app.listen(process.env.PORT || 3001), {
   cors: {
-    origin: 'https://animated-cannoli-3bf6d7.netlify.app',
+    origin: '*',
     methods: ['GET', 'POST'],
   },
 });
