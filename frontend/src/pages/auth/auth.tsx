@@ -92,7 +92,7 @@ const Auth: Component = () => {
       } else {
         try {
           const response = await fetch(
-            `${import.meta.env.VITE_API_URI}/users/signupx`,
+            `${import.meta.env.VITE_API_URI}/users/signup`,
             {
               method: 'POST',
               headers: {
@@ -113,6 +113,9 @@ const Auth: Component = () => {
           if (!response.ok) {
             return toast.error(responseData.message);
           }
+
+          setIsLoginView(true);
+          toast.success('Now you can log in!');
         } catch (err) {
           if (err instanceof Error) {
             toast.error(err.message || 'Something went wrong');
@@ -121,8 +124,6 @@ const Auth: Component = () => {
           setIsLoading();
         }
       }
-
-      setIsLoading('true');
     },
   });
 
