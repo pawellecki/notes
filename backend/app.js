@@ -2,9 +2,8 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const app = express();
-const io = require('socket.io')(app, {
+const io = require('socket.io')(app.listen(process.env.PORT || 3001), {
   cors: {
-    // origin: 'http://127.0.0.1:5173',
     origin: 'https://animated-cannoli-3bf6d7.netlify.app',
     methods: ['GET', 'POST'],
   },
