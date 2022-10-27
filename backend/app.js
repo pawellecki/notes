@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const app = express();
 const io = require('socket.io')(3001, {
   cors: {
-    origin: ['*'],
+    origin: 'http://127.0.0.1:5173',
     methods: ['GET', 'POST'],
   },
 });
