@@ -2,11 +2,9 @@ const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const app = express();
-// var http = require('http');
-var server = app.listen(3001);
-const io = require('socket.io')(server, {
+const io = require('socket.io')(3001, {
   cors: {
-    origin: '*',
+    origin: ['*'],
     methods: ['GET', 'POST'],
   },
 });

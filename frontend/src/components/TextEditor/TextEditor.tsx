@@ -26,7 +26,7 @@ const TextEditor: Component<Props> = (props) => {
       newQuill.setContents(testContent);
     }
 
-    socket = io('http://127.0.0.1:5173');
+    socket = io('http://localhost:3001');
 
     const onTextChange = (delta, oldDelta, source) => {
       if (source !== 'user') return;
